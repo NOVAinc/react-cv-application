@@ -1,23 +1,40 @@
-import { useState } from "react";
 import { Fragment } from "react";
 import FormField from "./FormField";
 
-function DataForm() {
-  const [resume, setResume] = useState({});
-  const [positions, setPositions] = useState([
-    {
-      // jobRole: undefined,
-      // jobCompany: undefined,
-      // jobMonthStart: undefined,
-      // jobMonthEnd: undefined,
-    },
-  ]);
+// Add support for saving position data in an array
 
-  // TODO: Add onChange function for fields
+function DataForm({ data, onFieldChange }) {
+  function addExperienceForm(positions) {
+    return positions.map((position, index) => {
+      let jobNumber = index + 1;
 
-  function handleChange(key, value) {
-    const newResume = { ...resume, [key]: value };
-    setResume(newResume);
+      return (
+        <Fragment key={jobNumber}>
+          <h3>Position {jobNumber}</h3>
+          <FormField
+            id={"job-" + jobNumber + "-role"}
+            label="Role Name"
+            type="text"
+            formKey={"job" + jobNumber + "name"}
+            onChange={onFieldChange}
+          />
+          <FormField
+            id={"job-" + jobNumber + "-company"}
+            label="Company Name"
+            type="text"
+            formKey={"job" + jobNumber + "company"}
+            onChange={onFieldChange}
+          />
+          <FormField
+            id={"job-" + jobNumber + "-year"}
+            label="Year"
+            type="tel"
+            formKey={"job" + jobNumber + "year"}
+            onChange={onFieldChange}
+          />
+        </Fragment>
+      );
+    });
   }
 
   return (
@@ -29,21 +46,24 @@ function DataForm() {
         label="Full Name"
         type="text"
         formKey="contactName"
-        onChange={handleChange}
+        value={data["contactName"]}
+        onChange={onFieldChange}
       />
       <FormField
         id="contact-phone"
         label="Telephone Number"
         type="tel"
         formKey="contactPhone"
-        onChange={handleChange}
+        value={data["contactPhone"]}
+        onChange={onFieldChange}
       />
       <FormField
         id="contact-email"
         label="Email Address"
         type="email"
         formKey="contactEmail"
-        onChange={handleChange}
+        value={data["contactEmail"]}
+        onChange={onFieldChange}
       />
       <h2>Education</h2>
       <FormField
@@ -51,49 +71,29 @@ function DataForm() {
         label="Title"
         type="text"
         formKey="educationTitle"
-        onChange={handleChange}
+        value={data["educationTitle"]}
+        onChange={onFieldChange}
       />
       <FormField
         id="education-institution"
         label="Institution"
         type="text"
         formKey="educationInstitution"
-        onChange={handleChange}
+        value={data["educationInstitution"]}
+        onChange={onFieldChange}
       />
       <FormField
         id="education-year"
         label="Year"
         type="tel"
         formKey="educationYear"
-        onChange={handleChange}
+        value={data["educationYear"]}
+        onChange={onFieldChange}
       />
       <h2>Experience</h2>
-      {addExperienceForm(positions)}
+      {addExperienceForm(data["positions"])}
     </form>
   );
-}
-
-function addExperienceForm(positions) {
-  return positions.map((position, index) => {
-    let jobNumber = index + 1;
-
-    return (
-      <Fragment key={jobNumber}>
-        <h3>Position {jobNumber}</h3>
-        <FormField
-          id={"job-" + jobNumber + "-role"}
-          label="Role Name"
-          type="text"
-        />
-        <FormField
-          id={"job-" + jobNumber + "-company"}
-          label="Company Name"
-          type="text"
-        />
-        <FormField id={"job-" + jobNumber + "-year"} label="Year" type="tel" />
-      </Fragment>
-    );
-  });
 }
 
 export default DataForm;

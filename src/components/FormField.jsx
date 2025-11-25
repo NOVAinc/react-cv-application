@@ -5,6 +5,7 @@ export default function FormField({
   label = "Data",
   type = "text",
   formKey,
+  value,
   onChange,
 }) {
   return (
@@ -14,6 +15,7 @@ export default function FormField({
       <input
         id={id}
         type={type}
+        value={value}
         onChange={(e) => {
           e.preventDefault();
           onChange(formKey, e.target.value);
