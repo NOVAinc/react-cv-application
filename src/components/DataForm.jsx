@@ -1,37 +1,111 @@
 import { Fragment } from "react";
 import FormField from "./FormField";
+import "../App.css";
 
-// Add support for saving position data in an array
+function DataForm({
+  data,
+  positions,
+  changeData,
+  changePositions,
+  changeResponsibility,
+  removePosition,
+}) {
+  function addResponsibilityForm(jobIndex, responsibilities = [""]) {
+    return responsibilities.map((responsibility, index) => {
+      return (
+        <Fragment key={index}>
+          <FormField
+            index={jobIndex}
+            responsibilityIndex={index}
+            id={"job-" + jobIndex + "-responsibility-" + index}
+            value={responsibility}
+            changeResponsibility={changeResponsibility}
+          >
+            <button
+              className="inline-button"
+              onClick={(e) => {
+                e.preventDefault();
+                const newResponsibilities = [...responsibilities];
 
-function DataForm({ data, onFieldChange }) {
+                newResponsibilities.splice(index, 1);
+
+                changeResponsibility(jobIndex, index, newResponsibilities);
+              }}
+            >
+              X
+            </button>
+          </FormField>
+        </Fragment>
+      );
+    });
+  }
+
   function addExperienceForm(positions) {
     return positions.map((position, index) => {
       let jobNumber = index + 1;
 
       return (
-        <Fragment key={jobNumber}>
+        <Fragment key={index}>
           <h3>Position {jobNumber}</h3>
+          <button
+            className="inline-button"
+            onClick={(e) => {
+              e.preventDefault();
+              removePosition(index);
+            }}
+          >
+            X
+          </button>
           <FormField
-            id={"job-" + jobNumber + "-role"}
+            index={index}
+            id={"job-role-" + index}
             label="Role Name"
             type="text"
-            formKey={"job" + jobNumber + "name"}
-            onChange={onFieldChange}
+            formKey={"jobRole"}
+            value={position["jobRole"]}
+            changePositions={changePositions}
           />
           <FormField
-            id={"job-" + jobNumber + "-company"}
+            index={index}
+            id={"job-company-" + index}
             label="Company Name"
             type="text"
-            formKey={"job" + jobNumber + "company"}
-            onChange={onFieldChange}
+            formKey={"jobCompany"}
+            value={position["jobCompany"]}
+            changePositions={changePositions}
           />
           <FormField
-            id={"job-" + jobNumber + "-year"}
-            label="Year"
-            type="tel"
-            formKey={"job" + jobNumber + "year"}
-            onChange={onFieldChange}
+            index={index}
+            id={"job-year-start-" + jobNumber}
+            label="Start Month and Year"
+            type="month"
+            formKey={"jobStartYear"}
+            value={position["jobStartYear"]}
+            changePositions={changePositions}
           />
+          <FormField
+            index={index}
+            id={"job-year-end-" + jobNumber}
+            label="End Month and Year"
+            type="month"
+            formKey={"jobEndYear"}
+            value={position["jobEndYear"]}
+            changePositions={changePositions}
+          />
+          <h3>Responsibilities</h3>
+          {addResponsibilityForm(index, position["responsibilities"])}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              const newResponsibilities = [...position["responsibilities"]];
+              newResponsibilities.push("");
+
+              changePositions(index, "responsibilities", newResponsibilities);
+            }}
+          >
+            Add Responsibility
+          </button>
+          <br />
         </Fragment>
       );
     });
@@ -47,7 +121,7 @@ function DataForm({ data, onFieldChange }) {
         type="text"
         formKey="contactName"
         value={data["contactName"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <FormField
         id="contact-phone"
@@ -55,7 +129,7 @@ function DataForm({ data, onFieldChange }) {
         type="tel"
         formKey="contactPhone"
         value={data["contactPhone"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <FormField
         id="contact-email"
@@ -63,7 +137,7 @@ function DataForm({ data, onFieldChange }) {
         type="email"
         formKey="contactEmail"
         value={data["contactEmail"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <h2>Education</h2>
       <FormField
@@ -72,7 +146,7 @@ function DataForm({ data, onFieldChange }) {
         type="text"
         formKey="educationTitle"
         value={data["educationTitle"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <FormField
         id="education-institution"
@@ -80,7 +154,7 @@ function DataForm({ data, onFieldChange }) {
         type="text"
         formKey="educationInstitution"
         value={data["educationInstitution"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <FormField
         id="education-year"
@@ -88,10 +162,10 @@ function DataForm({ data, onFieldChange }) {
         type="tel"
         formKey="educationYear"
         value={data["educationYear"]}
-        onChange={onFieldChange}
+        changeData={changeData}
       />
       <h2>Experience</h2>
-      {addExperienceForm(data["positions"])}
+      {addExperienceForm(positions)}
     </form>
   );
 }
