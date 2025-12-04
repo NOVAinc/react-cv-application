@@ -4,3 +4,11 @@
   padding: 2rem;
   text-align: left;
 }
+
+button {
+  display: inline-block;
+}
+
+h3 {
+  display: inline-block;
+}
