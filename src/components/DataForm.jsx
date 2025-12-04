@@ -4,11 +4,12 @@ import "../App.css";
 
 function DataForm({
   data,
-  positions,
+  positions = [{ responsibilities: [""] }],
   changeData,
   changePositions,
   changeResponsibility,
   removePosition,
+  removeResponsibility,
 }) {
   function addResponsibilityForm(jobIndex, responsibilities = [""]) {
     return responsibilities.map((responsibility, index) => {
@@ -25,11 +26,7 @@ function DataForm({
               className="inline-button"
               onClick={(e) => {
                 e.preventDefault();
-                const newResponsibilities = [...responsibilities];
-
-                newResponsibilities.splice(index, 1);
-
-                changeResponsibility(jobIndex, index, newResponsibilities);
+                removeResponsibility(jobIndex, index);
               }}
             >
               X

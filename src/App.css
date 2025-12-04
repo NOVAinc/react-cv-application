@@ -5,10 +5,7 @@
   text-align: left;
 }
 
-h3 + button.inline-button,
-input + button.inline-button,
-button.inline-button + h3,
-button.inline-button + input {
+button {
   display: inline-block;
 }
 
